@@ -2,6 +2,8 @@
 
 Welcome to the **2048-Deep-Q-Bot** project! This repository contains a Deep Q-Learning bot for playing the game 2048. The bot is implemented using Python and TensorFlow, and it aims to achieve the 2048 tile with the least number of moves possible.
 
+Real 2048 Game: https://play2048.co/
+
 ## Introduction
 
 The **2048-Deep-Q-Bot** project implements a reinforcement learning agent using Deep Q-Learning to play the game 2048. The objective of the bot is to learn an optimal strategy to reach the 2048 tile in the least number of moves. The game logic is implemented in Python, and the neural network is built using TensorFlow.
