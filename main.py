@@ -1,11 +1,11 @@
 import os
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-import tensorflow as tf
-from tensorflow.keras import layers
-from Game2048Env import Game2048Env
+import time
 import numpy as np
 import random
 from collections import deque
+import tensorflow as tf
+from tensorflow.keras import layers
+from Game2048Env import Game2048Env
 
 def build_model(input_shape, output_shape):
     model = tf.keras.Sequential()
@@ -30,9 +30,19 @@ def load_model(path="dqn_2048_model.h5"):
         print(f"No model found at {path}, training a new model.")
         return None
 
-def train_dqn(env, model, episodes=1000, gamma=0.99, epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01, batch_size=64):
+def save_moves(moves, path="moves_record.txt"):
+    with open(path, "a") as f:
+        for move in moves:
+            f.write(f"{move}\n")
+    print(f"Moves recorded to {path}")
+
+def train_dqn(env, model, episodes=1, gamma=0.99, epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.01, batch_size=64):
     memory = deque(maxlen=2000)
+    start_time = time.time()
+    moves_record = []
+
     for episode in range(episodes):
+        episode_start_time = time.time()
         state = env.reset()
         done = False
         total_moves = 0
@@ -60,11 +70,17 @@ def train_dqn(env, model, episodes=1000, gamma=0.99, epsilon=1.0, epsilon_decay=
         if epsilon > epsilon_min:
             epsilon *= epsilon_decay
 
-        print(f"Episode {episode + 1}/{episodes} - Moves: {total_moves}")
+        episode_end_time = time.time()
+        moves_record.append(total_moves)
+        print(f"Episode {episode + 1}/{episodes} - Moves: {total_moves} - Time: {episode_end_time - episode_start_time:.2f} seconds")
 
+    end_time = time.time()
+    print(f"Total training time: {end_time - start_time:.2f} seconds")
     save_model(model)
+    save_moves(moves_record)
 
-model = load_model() or build_model((4, 4), 4)
+while True:
+    model = load_model() or build_model((4, 4), 4)
 
-env = Game2048Env()
-train_dqn(env, model, episodes=1000)
+    env = Game2048Env()
+    train_dqn(env, model, episodes=1)
