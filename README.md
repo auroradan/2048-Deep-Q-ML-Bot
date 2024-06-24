@@ -43,3 +43,7 @@ To train the Deep Q-Learning agent, run the `main.py` script:
 
 ```bash
 python main.py
+```
+
+## Current Training Graph
+![image](https://github.com/auroradan/2048-Deep-Q-ML-Bot/assets/103843222/f5f4d514-0c08-4d1a-8f28-36cbe5818e01)
